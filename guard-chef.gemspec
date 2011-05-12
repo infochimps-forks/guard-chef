@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.description = 'Guard::Chef allows to automatically & intelligently update roles, cookbooks, and databags for chef.'
 
   s.required_rubygems_version = '>= 1.3.6'
-  s.rubyforge_project         = 'guard-chef'
 
   s.add_dependency 'guard', '>= 0.2.2'
 

@@ -19,7 +19,7 @@ Add it to your Gemfile (inside test group):
 
 Add guard definition to your Guardfile by running this command:
 
-    guard init bundler
+    guard init chef
 
 == Usage
 
