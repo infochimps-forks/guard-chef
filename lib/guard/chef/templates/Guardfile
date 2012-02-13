@@ -1,0 +1,7 @@
+
+# run the right knife command on changes within the cookbooks, roles and data_bags directories
+guard 'chef' do
+  watch(%r{^cookbooks/(.+)/})
+  watch(%r{^roles/(.+).rb})
+  watch(%r{^data_bags/(.+)/})
+end
