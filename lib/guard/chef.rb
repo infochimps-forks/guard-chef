@@ -1,6 +1,5 @@
 require 'guard'
 require 'guard/guard'
-require 'active_support/inflector'
 
 module Guard
   class Chef < Guard

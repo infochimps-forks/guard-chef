@@ -8,7 +8,7 @@ describe CookbookJob do
 
     it "runs a properly quoted +knife cookbook upload+ command" do
       subject.should_receive(:"`").
-        with("knife cookbook upload 'test'").
+        with("knife cookbook upload -VV 'test'").
         and_return( "upload complete" )
 
       nostdout{ subject.send(:update) }

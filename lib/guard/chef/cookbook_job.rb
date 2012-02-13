@@ -1,7 +1,7 @@
 class CookbookJob < Guard::Chef::Base
 
   def command
-    "knife cookbook upload '#{name}'"
+    "knife cookbook upload -VV '#{name}'"
   end
 
   def sentinel_re

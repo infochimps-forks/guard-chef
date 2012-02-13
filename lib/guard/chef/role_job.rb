@@ -1,7 +1,7 @@
 class RoleJob < Guard::Chef::Base
 
   def command
-    "knife role from file '#{target}'"
+    "knife role from file -VV '#{target}'"
   end
 
   def sentinel_re

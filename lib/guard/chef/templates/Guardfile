@@ -1,8 +1,13 @@
 
 # run the right knife command on changes within the cookbooks, roles and data_bags directories
 guard 'chef' do
+  # # uncomment if you follow the "symlink into vendor" practice:
+  # # this turns notification for vendor/infochimps-labs/foo/recipes.rb
+  # # into a notification for cookbooks/foo/recipes.rb if cookbooks/foo exists
+  # watch(%r{vendor/[^/]+/(.+)}){|m| fn = "cookbooks/#{m[1]}" ; fn if File.exists?(fn) }
+
   watch(%r{^.*cookbooks/(.+)/})
-  watch(%r{^roles/(.+).(rb|json)\z})
+  watch(%r{^roles/(.+)\.(rb|json)\z})
   watch(%r{^data_bags/(.+)/})
-  watch(%r{^environments/.(rb|json)\z})
+  watch(%r{^environments/.*\.(rb|json)\z})
 end

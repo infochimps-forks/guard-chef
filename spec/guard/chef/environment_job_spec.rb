@@ -4,13 +4,13 @@ require 'spec_helper'
 describe EnvironmentJob do
   subject { @job = EnvironmentJob.new("environments/happy_environment.json", "happiness") }
 
-  ENVIRONMENT_SUCCESS_MANTRA = "Updated Environment happiness!"
+  ENVIRONMENT_SUCCESS_MANTRA = "Updated Environment happiness"
 
   describe "update" do
 
     it "runs a properly quoted +knife environment upload+ command" do
       subject.should_receive(:"`").
-        with("knife environment from file 'environments/happy_environment.json'").
+        with("knife environment from file -VV 'environments/happy_environment.json'").
         and_return( ENVIRONMENT_SUCCESS_MANTRA )
 
       nostdout{ subject.send(:update) }

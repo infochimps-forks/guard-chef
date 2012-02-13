@@ -10,7 +10,7 @@ describe RoleJob do
 
     it "runs a properly quoted +knife role upload+ command" do
       subject.should_receive(:"`").
-        with("knife role from file 'roles/happy_role.json'").
+        with("knife role from file -VV 'roles/happy_role.json'").
         and_return( ROLE_SUCCESS_MANTRA )
 
       nostdout{ subject.send(:update) }
