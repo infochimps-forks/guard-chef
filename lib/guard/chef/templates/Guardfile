@@ -1,7 +1,8 @@
 
 # run the right knife command on changes within the cookbooks, roles and data_bags directories
 guard 'chef' do
-  watch(%r{^cookbooks/(.+)/})
-  watch(%r{^roles/(.+).rb})
+  watch(%r{^.*cookbooks/(.+)/})
+  watch(%r{^roles/(.+).(rb|json)\z})
   watch(%r{^data_bags/(.+)/})
+  watch(%r{^environments/.(rb|json)\z})
 end

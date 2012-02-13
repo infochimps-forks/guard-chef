@@ -1,11 +1,11 @@
-class RoleJob < Guard::Chef::Base
+class EnvironmentJob < Guard::Chef::Base
 
   def command
-    "knife role from file '#{target}'"
+    "knife environment from file '#{target}'"
   end
 
   def sentinel_re
-    /Updated Role #{name}!/
+    /Updated Environment #{name}!/
   end
 
   def self.accepts?(path, extension)

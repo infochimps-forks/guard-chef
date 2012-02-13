@@ -10,7 +10,7 @@ puts "Please do not update/create files while tests are running."
 
 RSpec.configure do |config|
   config.color_enabled = true
-  
+
   config.before(:each) do
     ENV["GUARD_ENV"] = 'test'
     @fixture_path = Pathname.new(File.expand_path('../fixtures/', __FILE__))
@@ -19,5 +19,12 @@ RSpec.configure do |config|
   config.after(:each) do
     ENV["GUARD_ENV"] = nil
   end
-  
+
+  def nostdout
+    silence_stream(STDOUT){ yield }
+  end
+  def nostderr
+    silence_stream(STDERR){ yield }
+  end
+
 end

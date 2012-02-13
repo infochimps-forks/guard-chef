@@ -2,10 +2,12 @@ require 'guard'
 require 'guard/guard'
 require 'active_support/inflector'
 
-Dir[File.expand_path('../chef/*_job.rb',  __FILE__)].each {|f| require f}
-
 module Guard
   class Chef < Guard
+
+    require 'guard/chef/base'
+    Dir[File.expand_path('../chef/*_job.rb',  __FILE__)].each {|f| require f}
+
     def initialize(watchers=[], options={})
       super
       @base_dir = ::File.expand_path('../../../',  __FILE__)
@@ -51,27 +53,50 @@ module Guard
       end
       true
     end
-    
+
   private
-  
+
     def updated?(path)
-      target = perform(path)
-      unless target.nil?
-        target.update
-        return true
-      end
-      false
+      target = perform(path) or return false
+      target.update
+      true
     end
-  
-    def perform(path)
-      begin
-        matches = path.split("/")
-        type, target = "#{matches[0].classify}Job", matches[1]
-        type.constantize.new(@base_dir, target.gsub(".rb", ''))
-      rescue Exception
-        puts "#{type.classify} is not a valid watch type"
-        nil
+
+    # cookbooks is last because it is most likely to be in a confounding container dir
+    CHEF_OBJECT_RE = %r{.*(roles|data_?bags|environments|cookbooks)/([^/]+)}
+
+    # finds
+    #    site-cookbooks/flume/recipes/default.rb # => ["cookbooks", "flume" ]
+    #    alices-cookbooks/cookbooks/bob/templates/default/charlie.rb # => ["cookbooks", "bob" ]
+    def split_path(path)
+      m = CHEF_OBJECT_RE.match(path)
+      unless m
+        warn "Skipping '#{path}' -- it doesn't look like '*cookbooks/**/*', '*roles/*.{rb,json}', '*environments/*.{rb,json}' or '*data_bags/*.{rb,json}'"
+        return
+      else
+        parent_seg, child_seg = m.captures
+        child_seg.gsub!(/\.(rb|json)$/, "")
+        extension = $1
+        [parent_seg, child_seg, extension]
       end
+    end
+
+    def jobklass_for(parent_seg)
+      case parent_seg
+      when /cookbooks/    then CookbookJob
+      when /roles/        then RoleJob
+      when /data_?bags/   then DataBagJob
+      when /environments/ then EnvironmentJob
+      else nil
+      end
+    end
+
+    def perform(path)
+      parent_seg, target_name, extension = split_path(path)
+      jobklass    = jobklass_for(parent_seg)
+      return unless parent_seg && target_name && jobklass
+      return unless jobklass.accepts?(path, extension)
+      jobklass.new(path, target_name)
     end
   end
 end

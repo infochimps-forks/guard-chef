@@ -2,17 +2,29 @@
 require 'spec_helper'
 
 describe RoleJob do
-  subject { @job = RoleJob.new("base/path", "test") }
-  
+  subject { @job = RoleJob.new("roles/happy_role.json", "happiness") }
+
+  ROLE_SUCCESS_MANTRA = "Updated Role happiness!"
+
   describe "update" do
-    it "should be true if it receives the 'Updated Role test!' message" do
-      subject.should_receive(:`).
-        with("cd base/path && rake role[test]").
-        and_return( "Updated Role test!" )
-        
-      silence_stream(STDOUT) do
-        subject.send(:update).should be(true)
-      end
+
+    it "runs a properly quoted +knife role upload+ command" do
+      subject.should_receive(:"`").
+        with("knife role from file 'roles/happy_role.json'").
+        and_return( ROLE_SUCCESS_MANTRA )
+
+      nostdout{ subject.send(:update) }
     end
+
+    it "is true if it receives the '#{ROLE_SUCCESS_MANTRA}' message" do
+      subject.stub(:"`"){ ROLE_SUCCESS_MANTRA }
+      nostdout{ subject.send(:update).should == true }
+    end
+
+    it "is false if it does not receive the '#{ROLE_SUCCESS_MANTRA}' message" do
+      subject.stub(:"`"){ "ZOMG BEES!!!" }
+      nostdout{ subject.send(:update).should == false }
+    end
+
   end
 end
