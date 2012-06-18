@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '>= 1.3.6'
 
-  s.add_dependency 'guard', '>= 0.2.2'
+  s.add_dependency              'guard',  '~> 0.2'
 
-  s.add_development_dependency 'bundler', '~> 1.0.2'
-  s.add_development_dependency 'rspec',   '~> 2.0.1'
+  s.add_development_dependency 'bundler', '>= 1.1'
+  s.add_development_dependency 'rspec',   '~> 2.5'
 
   s.files        = Dir.glob('{lib}/**/*') + %w[LICENSE README.rdoc]
   s.require_path = 'lib'
