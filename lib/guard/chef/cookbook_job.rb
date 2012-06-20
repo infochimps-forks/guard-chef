@@ -5,7 +5,7 @@ class CookbookJob < Guard::Chef::Base
   end
 
   def sentinel_re
-    /upload complete/
+    /(?:upload complete|uploaded \d+ cookbook)/i
   end
 
 end

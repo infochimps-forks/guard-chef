@@ -43,14 +43,22 @@ module Guard
       true
     end
 
-    # Called on file(s) modifications
-    def run_on_change(paths)
+    # Called on file modifications and additions
+    def run_on_changes(paths)
       paths.each do |path|
         unless updated?(path)
           return false
         end
       end
       true
+    end
+
+    # warn a user that we don't do anything to handle deleted files.
+    # does not call super, so guard action isn't triggered
+    def run_on_removals(paths)
+      paths.each do |path|
+        warn "file #{path} removed -- it's up to you to remove it from the server if desired"
+      end
     end
 
   private
