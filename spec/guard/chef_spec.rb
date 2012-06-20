@@ -95,12 +95,12 @@ describe Guard::Chef do
   context 'run_on_change' do
     it "should return true if updated?" do
       subject.stub(:updated?) { true }
-      subject.send(:run_on_change, ["some/resource/path"]).should be(true)
+      subject.send(:run_on_changes, ["some/resource/path"]).should be(true)
     end
 
     it "should return false unless updated?" do
       subject.stub(:updated?) { false }
-      subject.send(:run_on_change, ["some/resource/path"]).should be(false)
+      subject.send(:run_on_changes, ["some/resource/path"]).should be(false)
     end
 
   end

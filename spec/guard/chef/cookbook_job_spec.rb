@@ -19,6 +19,11 @@ describe CookbookJob do
       nostdout{ subject.send(:update).should be(true) }
     end
 
+    it "should be true if it receives the 'Uploaded 1 cookbook' message" do
+      subject.stub(:"`").and_return( "Uploaded 1 cookbook" )
+      nostdout{ subject.send(:update).should be(true) }
+    end
+
     it "should be false if it receives the 'upload complete' message" do
       subject.stub(:"`").and_return( "ZOMG BEES!!!" )
       nostdout{ subject.send(:update).should be(false) }
